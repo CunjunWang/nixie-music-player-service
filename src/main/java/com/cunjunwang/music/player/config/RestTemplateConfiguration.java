@@ -1,5 +1,6 @@
 package com.cunjunwang.music.player.config;
 
+import com.cunjunwang.music.player.entity.WxMappingJackson2HttpMessageConverter;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,9 +50,9 @@ public class RestTemplateConfiguration {
     // 初始化RestTemplate,并加入spring的Bean工厂，由spring统一管理
     @Bean
     @ConditionalOnMissingBean(RestTemplate.class)
-    public RestTemplate getRestTemplate(){
+    public RestTemplate getRestTemplate() {
         RestTemplate restTemplate = new RestTemplate(this.createFactory());
-        List<HttpMessageConverter<?>> converterList =  restTemplate.getMessageConverters();
+        List<HttpMessageConverter<?>> converterList = restTemplate.getMessageConverters();
         // 重新设置StringHttpMessageConverter字符集为UTF-8，解决中文乱码问题
         HttpMessageConverter<?> converterTarget = null;
         for (HttpMessageConverter<?> item : converterList) {
@@ -65,7 +66,7 @@ public class RestTemplateConfiguration {
             converterList.remove(converterTarget);
         }
         converterList.add(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
-
+        converterList.add(2, new WxMappingJackson2HttpMessageConverter());
         return restTemplate;
     }
 }

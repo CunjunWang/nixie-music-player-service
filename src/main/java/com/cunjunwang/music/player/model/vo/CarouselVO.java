@@ -1,4 +1,4 @@
-package com.cunjunwang.music.player.model;
+package com.cunjunwang.music.player.model.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

@@ -1,6 +1,7 @@
 package com.cunjunwang.music.player.service.inf;
 
-import com.cunjunwang.music.player.model.CarouselVO;
+import com.cunjunwang.music.player.model.vo.CarouselVO;
+import com.cunjunwang.music.player.model.vo.DiscVO;
 
 import java.util.List;
 
@@ -15,5 +16,12 @@ public interface IRecommendService {
      * @return 轮播图列表
      */
     List<CarouselVO> getCarouselList();
+
+    /**
+     * 获取歌单列表
+     *
+     * @return 歌单列表
+     */
+    List<DiscVO> getDiscList();
 
 }

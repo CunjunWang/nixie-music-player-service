@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cunjunwang.music.player.dao.TmSingerTagsMapper">
+    <resultMap id="BaseResultMap" type="com.cunjunwang.music.player.model.po.TmSingerTags">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="tag_name" jdbcType="VARCHAR" property="tagName"/>
+        <result column="tag_english_name" jdbcType="VARCHAR" property="tagEnglishName"/>
+        <result column="tag_code" jdbcType="INTEGER" property="tagCode"/>
+        <result column="is_del" jdbcType="INTEGER" property="isDel"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, tag_name, tag_english_name, tag_code, is_del, create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tm_singer_tags
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <insert id="insert" parameterType="com.cunjunwang.music.player.model.po.TmSingerTags">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tm_singer_tags (id, tag_name, tag_english_name,
+        tag_code, is_del, create_time,
+        update_time)
+        values (#{id,jdbcType=BIGINT}, #{tagName,jdbcType=VARCHAR}, #{tagEnglishName,jdbcType=VARCHAR},
+        #{tagCode,jdbcType=INTEGER}, #{isDel,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.cunjunwang.music.player.model.po.TmSingerTags">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tm_singer_tags
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="tagName != null">
+                tag_name,
+            </if>
+            <if test="tagEnglishName != null">
+                tag_english_name,
+            </if>
+            <if test="tagCode != null">
+                tag_code,
+            </if>
+            <if test="isDel != null">
+                is_del,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=BIGINT},
+            <if test="tagName != null">
+                #{tagName,jdbcType=VARCHAR},
+            </if>
+            <if test="tagEnglishName != null">
+                #{tagEnglishName,jdbcType=VARCHAR},
+            </if>
+            <if test="tagCode != null">
+                #{tagCode,jdbcType=INTEGER},
+            </if>
+            <if test="isDel != null">
+                #{isDel,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cunjunwang.music.player.model.po.TmSingerTags">
+        update tm_singer_tags
+        <set>
+            <if test="tagName != null">
+                tag_name = #{tagName,jdbcType=VARCHAR},
+            </if>
+            <if test="tagEnglishName != null">
+                tag_english_name = #{tagEnglishName,jdbcType=VARCHAR},
+            </if>
+            <if test="tagCode != null">
+                tag_code = #{tagCode,jdbcType=INTEGER},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cunjunwang.music.player.model.po.TmSingerTags">
+        update tm_singer_tags
+        set tag_name         = #{tagName,jdbcType=VARCHAR},
+            tag_english_name = #{tagEnglishName,jdbcType=VARCHAR},
+            tag_code         = #{tagCode,jdbcType=INTEGER},
+            is_del           = #{isDel,jdbcType=INTEGER},
+            create_time      = #{createTime,jdbcType=TIMESTAMP},
+            update_time      = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

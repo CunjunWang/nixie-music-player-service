@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.cunjunwang.music.player.constant.Constant;
 import com.cunjunwang.music.player.constant.ErrConstant;
 import com.cunjunwang.music.player.exception.MusicPlayerException;
-import com.cunjunwang.music.player.model.vo.CarouselVO;
 import com.cunjunwang.music.player.model.vo.DiscVO;
 import com.cunjunwang.music.player.service.inf.IRecommendService;
 import org.slf4j.Logger;
@@ -18,10 +17,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 /**
  * Created by CunjunWang on 2019-05-09.
@@ -37,53 +34,16 @@ public class RecommendService implements IRecommendService {
 
     private static final String RESPONSE_DATA_KEY = "data";
 
-    private static final String RESPONSE_SLIDER_ARRAY_KEY = "slider";
-
     private static final String RESPONSE_DISC_ARRAY_KEY = "list";
-
-    @Value("${com.cunjunwang.music.player.getHomepageDataUrl}")
-    private String homepageDataUrl;
 
     @Value("${com.cunjunwang.music.player.getDiscListUrl}")
     private String discListUrl;
 
+    @Value("${com.cunjunwang.music.player.discSongListUrl}")
+    private String discSongListUrl;
+
     @Autowired
     private RestTemplate restTemplate;
-
-    /**
-     * 获取首页轮播图列表
-     *
-     * @return 轮播图列表
-     */
-    @Override
-    public List<CarouselVO> getCarouselList() {
-        List<CarouselVO> result = new ArrayList<>();
-        try {
-            logger.info("开始获取首页轮播图列表");
-            String responseString = restTemplate.getForObject(homepageDataUrl, String.class);
-            JSONObject responseObject = JSONObject.parseObject(responseString);
-            if (responseObject == null) {
-                throw new MusicPlayerException(ErrConstant.UNKNOWN_ERR, "获取首页轮播图列表失败");
-            }
-            logger.info("QQ音乐响应[{}]", responseObject);
-            if (RESPONSE_CODE_OK.equals(responseObject.getInteger(RESPONSE_CODE_KEY))) {
-                logger.info("调用QQ音乐接口成功");
-                JSONObject dataObject = responseObject.getJSONObject(RESPONSE_DATA_KEY);
-                if (dataObject == null) {
-                    throw new MusicPlayerException(ErrConstant.UNKNOWN_ERR, "获取首页轮播图列表失败");
-                }
-                JSONArray sliderArray = dataObject.getJSONArray(RESPONSE_SLIDER_ARRAY_KEY);
-                if (sliderArray != null) {
-                    String sliderArrayString = sliderArray.toJSONString();
-                    result = JSONArray.parseArray(sliderArrayString, CarouselVO.class);
-                }
-            }
-            return result;
-        } catch (Exception e) {
-            logger.error("获取首页轮播图列表失败", e);
-            throw new MusicPlayerException(ErrConstant.UNKNOWN_ERR, "获取首页轮播图列表失败");
-        }
-    }
 
     /**
      * 获取歌单列表
@@ -100,6 +60,10 @@ public class RecommendService implements IRecommendService {
             headers.add("host", "c.y.qq.com");
             HttpEntity entity = new HttpEntity(headers);
             Map<String, Object> params = new HashMap<>();
+            params.put("g_tk", 1928093487);
+            params.put("inCharset", StandardCharsets.UTF_8.displayName());
+            params.put("outCharset", StandardCharsets.UTF_8.displayName());
+            params.put("notice", 0);
             params.put("platform", "yqq");
             params.put("hostUin", 0);
             params.put("sin", 0);
@@ -108,12 +72,13 @@ public class RecommendService implements IRecommendService {
             params.put("needNewCode", 0);
             params.put("categoryId", 10000000);
             params.put("format", "json");
+            params.put("rnd", new Random().nextInt());
             String responseString = restTemplate.exchange(discListUrl, HttpMethod.GET, entity, String.class, params).getBody();
             JSONObject responseObject = JSONObject.parseObject(responseString);
             if (responseObject == null) {
                 throw new MusicPlayerException(ErrConstant.UNKNOWN_ERR, "获取首页推荐歌单列表失败");
             }
-            logger.info("QQ音乐响应[{}]", responseObject);
+            logger.debug("QQ音乐响应[{}]", responseObject);
             if (RESPONSE_CODE_OK.equals(responseObject.getInteger(RESPONSE_CODE_KEY))) {
                 logger.info("调用QQ音乐接口成功");
                 JSONObject dataObject = responseObject.getJSONObject(RESPONSE_DATA_KEY);

@@ -1,7 +1,6 @@
 package com.cunjunwang.music.player.controller;
 
 import com.cunjunwang.music.player.entity.ResultData;
-import com.cunjunwang.music.player.model.vo.CarouselVO;
 import com.cunjunwang.music.player.model.vo.DiscVO;
 import com.cunjunwang.music.player.service.impl.RecommendService;
 import io.swagger.annotations.Api;
@@ -19,24 +18,24 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/recommend")
-@Api(value = "推荐页面API", tags = {"推荐页面API"})
+@Api(value = "[首页推荐]首页推荐页面API", tags = {"[首页推荐]首页推荐页面API"})
 public class RecommendController {
 
     @Autowired
     private RecommendService recommendService;
 
-    @ApiOperation(value = "首页轮播图API", notes = "首页轮播图API")
-    @RequestMapping(value = "/carousel", method = RequestMethod.GET)
-    public ResultData<List<CarouselVO>> getCarouselList() {
-        return new ResultData<>(ResultData.SUCCESS, "", "获取首页轮播图列表成功",
-                recommendService.getCarouselList());
-    }
-
-    @ApiOperation(value = "歌单列表API", notes = "歌单列表API")
+    @ApiOperation(value = "获取推荐歌单列表", notes = "获取推荐歌单列表")
     @RequestMapping(value = "/discList", method = RequestMethod.GET)
     public ResultData<List<DiscVO>> getDiscList() {
-        return new ResultData<>(ResultData.SUCCESS, "", "获取首页歌单列表成功",
+        return new ResultData<>(ResultData.SUCCESS, "", "获取首页推荐歌单列表成功",
                 recommendService.getDiscList());
     }
+
+//    @ApiOperation(value = "获取推荐歌单歌曲列表", notes = "获取推荐歌单歌曲列表")
+//    @RequestMapping(value = "/discSongList", method = RequestMethod.GET)
+//    public ResultData<Boolean> getDiscSongList() {
+//        return new ResultData<>(ResultData.SUCCESS, "", "获取推荐歌单歌曲列表成功",
+//                recommendService.getDiscList());
+//    }
 
 }

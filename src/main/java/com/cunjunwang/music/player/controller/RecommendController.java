@@ -1,7 +1,7 @@
 package com.cunjunwang.music.player.controller;
 
 import com.cunjunwang.music.player.entity.ResultData;
-import com.cunjunwang.music.player.model.vo.DiscVO;
+import com.cunjunwang.music.player.model.vo.RecommendDiscVO;
 import com.cunjunwang.music.player.service.impl.RecommendService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,8 +25,8 @@ public class RecommendController {
     private RecommendService recommendService;
 
     @ApiOperation(value = "获取推荐歌单列表", notes = "获取推荐歌单列表")
-    @RequestMapping(value = "/discList", method = RequestMethod.GET)
-    public ResultData<List<DiscVO>> getDiscList() {
+    @RequestMapping(value = "/getDiscList", method = RequestMethod.GET)
+    public ResultData<List<RecommendDiscVO>> getDiscList() {
         return new ResultData<>(ResultData.SUCCESS, "", "获取首页推荐歌单列表成功",
                 recommendService.getDiscList());
     }

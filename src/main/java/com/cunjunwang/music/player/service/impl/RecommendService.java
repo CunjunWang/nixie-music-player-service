@@ -1,24 +1,22 @@
 package com.cunjunwang.music.player.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.cunjunwang.music.player.constant.Constant;
-import com.cunjunwang.music.player.constant.ErrConstant;
-import com.cunjunwang.music.player.exception.MusicPlayerException;
-import com.cunjunwang.music.player.model.vo.DiscVO;
+import com.cunjunwang.music.player.constant.QQApiConstant;
+import com.cunjunwang.music.player.model.vo.RecommendDiscVO;
+import com.cunjunwang.music.player.service.impl.api.RecommendApiService;
 import com.cunjunwang.music.player.service.inf.IRecommendService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 
 /**
  * Created by CunjunWang on 2019-05-09.
@@ -28,73 +26,32 @@ public class RecommendService implements IRecommendService {
 
     private static final Logger logger = LoggerFactory.getLogger(Constant.LOGGER);
 
-    private static final String RESPONSE_CODE_KEY = "code";
-
-    private static final Integer RESPONSE_CODE_OK = 0;
-
-    private static final String RESPONSE_DATA_KEY = "data";
-
-    private static final String RESPONSE_DISC_ARRAY_KEY = "list";
-
-    @Value("${com.cunjunwang.music.player.getDiscListUrl}")
-    private String discListUrl;
-
-    @Value("${com.cunjunwang.music.player.discSongListUrl}")
-    private String discSongListUrl;
-
     @Autowired
-    private RestTemplate restTemplate;
+    private RecommendApiService recommendApiService;
 
     /**
-     * 获取歌单列表
+     * 获取首页推荐歌单列表
      *
-     * @return 歌单列表
+     * @return 首页推荐歌单列表
      */
-    @Override
-    public List<DiscVO> getDiscList() {
-        List<DiscVO> result = new ArrayList<>();
-        try {
-            logger.info("开始获取首页推荐歌单列表");
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("referer", "https://c.y.qq.com/");
-            headers.add("host", "c.y.qq.com");
-            HttpEntity entity = new HttpEntity(headers);
-            Map<String, Object> params = new HashMap<>();
-            params.put("g_tk", 1928093487);
-            params.put("inCharset", StandardCharsets.UTF_8.displayName());
-            params.put("outCharset", StandardCharsets.UTF_8.displayName());
-            params.put("notice", 0);
-            params.put("platform", "yqq");
-            params.put("hostUin", 0);
-            params.put("sin", 0);
-            params.put("ein", 29);
-            params.put("sortId", 5);
-            params.put("needNewCode", 0);
-            params.put("categoryId", 10000000);
-            params.put("format", "json");
-            params.put("rnd", new Random().nextInt());
-            String responseString = restTemplate.exchange(discListUrl, HttpMethod.GET, entity, String.class, params).getBody();
-            JSONObject responseObject = JSONObject.parseObject(responseString);
-            if (responseObject == null) {
-                throw new MusicPlayerException(ErrConstant.UNKNOWN_ERR, "获取首页推荐歌单列表失败");
-            }
-            logger.debug("QQ音乐响应[{}]", responseObject);
-            if (RESPONSE_CODE_OK.equals(responseObject.getInteger(RESPONSE_CODE_KEY))) {
-                logger.info("调用QQ音乐接口成功");
-                JSONObject dataObject = responseObject.getJSONObject(RESPONSE_DATA_KEY);
-                if (dataObject == null) {
-                    throw new MusicPlayerException(ErrConstant.UNKNOWN_ERR, "获取首页推荐歌单列表失败");
-                }
-                JSONArray discArray = dataObject.getJSONArray(RESPONSE_DISC_ARRAY_KEY);
-                if (discArray != null) {
-                    String discArrayString = discArray.toJSONString();
-                    result = JSONArray.parseArray(discArrayString, DiscVO.class);
-                }
-            }
-            return result;
-        } catch (Exception e) {
-            logger.error("获取首页推荐歌单列表失败", e);
-            throw new MusicPlayerException(ErrConstant.UNKNOWN_ERR, "获取首页推荐歌单列表失败");
-        }
+    @Cacheable(value = "music:player:discList", key = "'music:player:discList'")
+    public List<RecommendDiscVO> getDiscList() {
+        logger.info("获取首页推荐歌单列表");
+        Map<String, String> params = new HashMap<>();
+        params.put(QQApiConstant.QQ_API_KEY_G_TK, QQApiConstant.QQ_API_VALUE_G_TK);
+        params.put(QQApiConstant.QQ_API_KEY_IN_CHAR_SET, StandardCharsets.UTF_8.displayName());
+        params.put(QQApiConstant.QQ_API_KEY_OUT_CHAR_SET, StandardCharsets.UTF_8.displayName());
+        params.put(QQApiConstant.QQ_API_KEY_NOTICE, "0");
+        params.put(QQApiConstant.QQ_API_KEY_PLATFORM, QQApiConstant.QQ_API_VALUE_PLATFORM);
+        params.put(QQApiConstant.QQ_API_KEY_HOST_UIN, "0");
+        params.put(QQApiConstant.QQ_API_KEY_SIN, "0");
+        params.put(QQApiConstant.QQ_API_KEY_EIN, "29");
+        params.put(QQApiConstant.QQ_API_KEY_SORT_ID, "5");
+        params.put(QQApiConstant.QQ_API_KEY_NEED_NEW_CODE, "0");
+        params.put(QQApiConstant.QQ_API_KEY_CATEGORY_ID, "10000000");
+        params.put(QQApiConstant.QQ_API_KEY_FORMAT, QQApiConstant.QQ_API_VALUE_FORMAT_JSON);
+        params.put(QQApiConstant.QQ_API_KEY_RND, String.valueOf(new Random().nextInt()));
+        return recommendApiService.getRecommendDiscList(params);
     }
+
 }

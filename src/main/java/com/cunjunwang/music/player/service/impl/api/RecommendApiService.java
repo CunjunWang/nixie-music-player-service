@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cunjunwang.music.player.constant.Constant;
 import com.cunjunwang.music.player.constant.ErrConstant;
 import com.cunjunwang.music.player.exception.MusicPlayerException;
-import com.cunjunwang.music.player.model.vo.RecommendDiscVO;
+import com.cunjunwang.music.player.model.dto.api.RecommendDiscApiDTO;
 import com.cunjunwang.music.player.service.inf.api.IRecommendApiService;
 import com.cunjunwang.music.player.util.RequestUrlUtil;
 import org.slf4j.Logger;
@@ -54,8 +54,8 @@ public class RecommendApiService implements IRecommendApiService {
      * @return 推荐歌单列表
      */
     @Override
-    public List<RecommendDiscVO> getRecommendDiscList(Map<String, String> params) {
-        List<RecommendDiscVO> result = new ArrayList<>();
+    public List<RecommendDiscApiDTO> getRecommendDiscList(Map<String, String> params) {
+        List<RecommendDiscApiDTO> result = new ArrayList<>();
         try {
             logger.info("调用QQ音乐接口, 获取首页推荐歌单列表");
             HttpHeaders headers = new HttpHeaders();
@@ -78,7 +78,7 @@ public class RecommendApiService implements IRecommendApiService {
                 JSONArray discArray = dataObject.getJSONArray(RESPONSE_DISC_ARRAY_KEY);
                 if (discArray != null) {
                     String discArrayString = discArray.toJSONString();
-                    result = JSONArray.parseArray(discArrayString, RecommendDiscVO.class);
+                    result = JSONArray.parseArray(discArrayString, RecommendDiscApiDTO.class);
                 }
             }
             return result;

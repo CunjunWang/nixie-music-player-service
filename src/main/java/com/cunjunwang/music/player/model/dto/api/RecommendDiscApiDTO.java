@@ -1,4 +1,4 @@
-package com.cunjunwang.music.player.model.vo;
+package com.cunjunwang.music.player.model.dto.api;
 
 import com.cunjunwang.music.player.model.dto.DiscCreatorDTO;
 import io.swagger.annotations.ApiModel;
@@ -16,7 +16,7 @@ import java.io.Serializable;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "歌单展示对象")
+@ApiModel(value = "QQ音乐返回歌单数据对象")
 public class RecommendDiscApiDTO implements Serializable {
 
     private static final long serialVersionUID = -1L;

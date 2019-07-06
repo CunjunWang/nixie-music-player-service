@@ -20,12 +20,5 @@ public class ErrConstant {
     public static final String INVALID_PARAMETER = "004";
 
     /* MUSIC-005 */
-    public static final String UNKONWN_BUS_LINE = "005";
-
-    /* MUSIC-006 */
-    public static final String DUPLICATE_BUS_LINE_INFO_ERR = "006";
-
-    /* MUSIC-007*/
-    public static final String DIRECTION_NOT_EXIST = "007";
-
+    public static final String NO_DATA_FOUND = "005";
 }

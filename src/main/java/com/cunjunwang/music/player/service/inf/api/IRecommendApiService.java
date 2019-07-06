@@ -1,6 +1,6 @@
 package com.cunjunwang.music.player.service.inf.api;
 
-import com.cunjunwang.music.player.model.vo.RecommendDiscVO;
+import com.cunjunwang.music.player.model.dto.api.RecommendDiscApiDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +16,6 @@ public interface IRecommendApiService {
      * @param params 接口url参数
      * @return 推荐歌单列表
      */
-    List<RecommendDiscVO> getRecommendDiscList(Map<String, String> params);
+    List<RecommendDiscApiDTO> getRecommendDiscList(Map<String, String> params);
 
 }

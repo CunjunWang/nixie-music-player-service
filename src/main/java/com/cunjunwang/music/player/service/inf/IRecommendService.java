@@ -1,6 +1,6 @@
 package com.cunjunwang.music.player.service.inf;
 
-import com.cunjunwang.music.player.model.vo.RecommendDiscVO;
+import com.cunjunwang.music.player.model.vo.disc.RecommendDiscGeneralVO;
 
 import java.util.List;
 
@@ -14,6 +14,13 @@ public interface IRecommendService {
      *
      * @return 歌单列表
      */
-    List<RecommendDiscVO> getDiscList();
+    List<RecommendDiscGeneralVO> getDiscList();
 
+    /**
+     * 根据歌单Id查询歌曲列表
+     *
+     * @param discId 歌单Id
+     * @return 歌曲列表
+     */
+    Boolean getDiscSongList(String discId);
 }

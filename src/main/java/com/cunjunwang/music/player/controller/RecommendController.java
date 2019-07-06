@@ -1,13 +1,16 @@
 package com.cunjunwang.music.player.controller;
 
+import com.cunjunwang.music.player.constant.ErrConstant;
 import com.cunjunwang.music.player.entity.ResultData;
-import com.cunjunwang.music.player.model.vo.RecommendDiscVO;
+import com.cunjunwang.music.player.model.vo.disc.RecommendDiscGeneralVO;
 import com.cunjunwang.music.player.service.impl.RecommendService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -26,16 +29,18 @@ public class RecommendController {
 
     @ApiOperation(value = "获取推荐歌单列表", notes = "获取推荐歌单列表")
     @RequestMapping(value = "/getDiscList", method = RequestMethod.GET)
-    public ResultData<List<RecommendDiscVO>> getDiscList() {
-        return new ResultData<>(ResultData.SUCCESS, "", "获取首页推荐歌单列表成功",
+    public ResultData<List<RecommendDiscGeneralVO>> getDiscList() {
+        return new ResultData<>(ResultData.SUCCESS, ErrConstant.SUCCESS, "获取首页推荐歌单列表成功",
                 recommendService.getDiscList());
     }
 
-//    @ApiOperation(value = "获取推荐歌单歌曲列表", notes = "获取推荐歌单歌曲列表")
-//    @RequestMapping(value = "/discSongList", method = RequestMethod.GET)
-//    public ResultData<Boolean> getDiscSongList() {
-//        return new ResultData<>(ResultData.SUCCESS, "", "获取推荐歌单歌曲列表成功",
-//                recommendService.getDiscList());
-//    }
+    @ApiOperation(value = "获取推荐歌单歌曲列表", notes = "获取推荐歌单歌曲列表")
+    @RequestMapping(value = "/getSongListByDiscId", method = RequestMethod.GET)
+    public ResultData<Boolean> getDiscSongList(
+            @ApiParam(name = "discId", value = "歌单Id", required = true)
+            @RequestParam("discId") String discId) {
+        return new ResultData<>(ResultData.SUCCESS, ErrConstant.SUCCESS, "获取推荐歌单歌曲列表成功",
+                recommendService.getDiscSongList(discId));
+    }
 
 }

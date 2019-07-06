@@ -17,7 +17,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "歌单展示对象")
-public class RecommendDiscVO implements Serializable {
+public class RecommendDiscApiDTO implements Serializable {
 
     private static final long serialVersionUID = -1L;
 

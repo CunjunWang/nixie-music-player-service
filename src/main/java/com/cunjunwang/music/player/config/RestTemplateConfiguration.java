@@ -24,13 +24,16 @@ import java.util.List;
 public class RestTemplateConfiguration {
 
     @Value("${remote.maxTotalConnect}")
-    private int maxTotalConnect; //连接池的最大连接数默认为0
+    private int maxTotalConnect; // 连接池的最大连接数默认为0
+
     @Value("${remote.maxConnectPerRoute}")
-    private int maxConnectPerRoute; //单个主机的最大连接数
+    private int maxConnectPerRoute; // 单个主机的最大连接数
+
     @Value("${remote.connectTimeout}")
-    private int connectTimeout; //连接超时默认2s
+    private int connectTimeout; // 连接超时默认2s
+
     @Value("${remote.readTimeout}")
-    private int readTimeout; //读取超时默认30s
+    private int readTimeout; // 读取超时默认30s
 
     // 创建HTTP客户端工厂
     private ClientHttpRequestFactory createFactory() {

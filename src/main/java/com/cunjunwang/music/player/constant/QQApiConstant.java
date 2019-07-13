@@ -33,12 +33,25 @@ public class QQApiConstant {
 
     public static final String QQ_API_KEY_RND = "rnd";
 
+    public static final String QQ_API_KEY_TYPE = "type";
+
+    public static final String QQ_API_KEY_JSON = "json";
+
+    public static final String QQ_API_KEY_UTF_8 = "utf8";
+
+    public static final String QQ_API_KEY_ONLY_SONG = "onlysong";
+
+    public static final String QQ_API_KEY_DISSTID = "disstid";
+
 
     // values
 
     public static final String QQ_API_VALUE_G_TK = "1928093487";
 
-    public static final String QQ_API_VALUE_PLATFORM = "yqq";
+    public static final String QQ_API_VALUE_PLATFORM_YQQ = "yqq";
 
     public static final String QQ_API_VALUE_FORMAT_JSON = "json";
+
+    public static final String QQ_API_VALUE_FORMAT_JSONP = "jsonp";
+
 }

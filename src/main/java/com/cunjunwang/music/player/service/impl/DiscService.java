@@ -5,9 +5,12 @@ import com.cunjunwang.music.player.constant.ErrConstant;
 import com.cunjunwang.music.player.constant.QQApiConstant;
 import com.cunjunwang.music.player.exception.MusicPlayerException;
 import com.cunjunwang.music.player.model.dto.DiscCreatorDTO;
+import com.cunjunwang.music.player.model.dto.DiscSongDataDTO;
 import com.cunjunwang.music.player.model.dto.api.DiscDetailApiDTO;
+import com.cunjunwang.music.player.model.dto.api.DiscSongApiDTO;
 import com.cunjunwang.music.player.model.dto.api.RecommendDiscApiDTO;
 import com.cunjunwang.music.player.model.vo.disc.DiscDetailVO;
+import com.cunjunwang.music.player.model.vo.disc.DiscSongVO;
 import com.cunjunwang.music.player.model.vo.disc.RecommendDiscGeneralVO;
 import com.cunjunwang.music.player.service.impl.api.DiscApiService;
 import com.cunjunwang.music.player.service.inf.IDiscService;
@@ -133,10 +136,10 @@ public class DiscService implements IDiscService {
      * 根据歌单Id查询歌曲列表
      *
      * @param discId 歌单Id
-     * @return 歌曲列表
+     * @return 歌曲列表数据
      */
     @Override
-    public Boolean getDiscSongList(String discId) {
+    public DiscSongDataDTO getDiscSongList(String discId) {
         logger.info("根据歌单Id[{}]获取歌曲列表", discId);
 
         // 构造入参
@@ -155,25 +158,35 @@ public class DiscService implements IDiscService {
         params.put(QQApiConstant.QQ_API_KEY_ONLY_SONG, "0");
         params.put(QQApiConstant.QQ_API_KEY_DISSTID, discId);
 
-        DiscDetailApiDTO discDetail = discApiService.getDiscDetail(params);
-        if (discDetail == null) {
+        List<DiscSongApiDTO> discSongList = discApiService.getDiscSongList(params);
+        if (discSongList == null || discSongList.isEmpty()) {
             errMessage = "获取歌单详情失败, 数据对象为空";
             logger.warn(errMessage);
             throw new MusicPlayerException(ErrConstant.NO_DATA_FOUND, errMessage);
         }
 
-        DiscDetailVO discDetailVO = new DiscDetailVO();
-        discDetailVO.setDiscId(discDetail.getDisstid());
-        discDetailVO.setDiscKeyId(discDetail.getDissid());
-        discDetailVO.setDescription(discDetail.getDesc());
-        discDetailVO.setDiscName(discDetail.getDissname());
-        discDetailVO.setLogo(discDetail.getLogo());
-        discDetailVO.setNickname(discDetail.getNickname());
-        discDetailVO.setSongNumber(discDetail.getSongnum());
-        discDetailVO.setVisitNumber(discDetail.getVisitnum());
-        discDetailVO.setTags(discDetail.getTags());
+        DiscSongDataDTO discSongDataDTO = new DiscSongDataDTO();
+        discSongDataDTO.setDiscId(discId);
+        discSongDataDTO.setSongCount(discSongList.size());
 
-        return null;
+        List<DiscSongVO> songList = new ArrayList<>();
+        for (DiscSongApiDTO discSongApiDTO : discSongList) {
+            DiscSongVO discSongVO = new DiscSongVO();
+            discSongVO.setAlbumId(discSongApiDTO.getAlbumid());
+            discSongVO.setAlbumMid(discSongApiDTO.getAlbummid());
+            discSongVO.setAlbumName(discSongApiDTO.getAlbumname());
+            discSongVO.setSongId(discSongApiDTO.getSongid());
+            discSongVO.setSongMid(discSongApiDTO.getSongmid());
+            discSongVO.setSongName(discSongApiDTO.getSongname());
+            discSongVO.setSize128(discSongApiDTO.getSize128());
+            discSongVO.setSize320(discSongApiDTO.getSize320());
+            discSongVO.setDuration(discSongApiDTO.getInterval());
+            discSongVO.setSingerList(discSongApiDTO.getSinger());
+            songList.add(discSongVO);
+        }
+        discSongDataDTO.setSongList(songList);
+
+        return discSongDataDTO;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.cunjunwang.music.player.service.inf;
 
+import com.cunjunwang.music.player.model.dto.DiscSongDataDTO;
 import com.cunjunwang.music.player.model.vo.disc.DiscDetailVO;
 import com.cunjunwang.music.player.model.vo.disc.RecommendDiscGeneralVO;
 
@@ -29,7 +30,7 @@ public interface IDiscService {
      * 根据歌单Id查询歌曲列表
      *
      * @param discId 歌单Id
-     * @return 歌曲列表
+     * @return 歌曲列表数据
      */
-    Boolean getDiscSongList(String discId);
+    DiscSongDataDTO getDiscSongList(String discId);
 }

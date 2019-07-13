@@ -2,6 +2,7 @@ package com.cunjunwang.music.player.controller;
 
 import com.cunjunwang.music.player.constant.ErrConstant;
 import com.cunjunwang.music.player.entity.ResultData;
+import com.cunjunwang.music.player.model.dto.DiscSongDataDTO;
 import com.cunjunwang.music.player.model.vo.disc.DiscDetailVO;
 import com.cunjunwang.music.player.model.vo.disc.RecommendDiscGeneralVO;
 import com.cunjunwang.music.player.service.impl.DiscService;
@@ -46,7 +47,7 @@ public class DiscController {
 
     @ApiOperation(value = "获取推荐歌单歌曲列表", notes = "获取推荐歌单歌曲列表")
     @RequestMapping(value = "/getSongListByDiscId", method = RequestMethod.GET)
-    public ResultData<Boolean> getDiscSongList(
+    public ResultData<DiscSongDataDTO> getDiscSongList(
             @ApiParam(name = "discId", value = "歌单Id", required = true)
             @RequestParam(value = "discId", required = true) String discId) {
         return new ResultData<>(ResultData.SUCCESS, ErrConstant.SUCCESS, "获取推荐歌单歌曲列表成功",

@@ -5,6 +5,7 @@ import com.cunjunwang.music.player.constant.Constant;
 import com.cunjunwang.music.player.constant.ErrConstant;
 import com.cunjunwang.music.player.exception.MusicPlayerException;
 import com.cunjunwang.music.player.model.dto.api.DiscDetailApiDTO;
+import com.cunjunwang.music.player.model.dto.api.DiscSongApiDTO;
 import com.cunjunwang.music.player.model.dto.api.RecommendDiscApiDTO;
 import com.cunjunwang.music.player.service.inf.api.IDiscApiService;
 import com.cunjunwang.music.player.util.RequestUrlUtil;
@@ -40,6 +41,8 @@ public class DiscApiService implements IDiscApiService {
     private static final String RESPONSE_DISC_ARRAY_KEY = "list";
 
     private static final String CD_LIST_KEY = "cdlist";
+
+    private static final String SONG_LIST_KEY = "songlist";
 
     @Value("${com.cunjunwang.music.player.getDiscListUrl}")
     private String discListUrl;
@@ -128,9 +131,68 @@ public class DiscApiService implements IDiscApiService {
                     throw new MusicPlayerException(ErrConstant.UNKNOWN_ERR, "获取歌单详情失败");
                 }
                 JSONObject discObject = arrayObject.getJSONObject(0);
+                if (discObject == null) {
+                    throw new MusicPlayerException(ErrConstant.UNKNOWN_ERR, "获取歌单详情失败");
+                }
                 String discString = discObject.toJSONString();
                 return JSON.parseObject(discString, new TypeReference<DiscDetailApiDTO>() {
                 });
+            } else {
+                logger.warn("调用QQ音乐接口失败");
+                return null;
+            }
+        } catch (Exception e) {
+            logger.error("获取歌单详情失败", e);
+            throw new MusicPlayerException(ErrConstant.UNKNOWN_ERR, "获取歌单详情失败");
+        }
+    }
+
+    /**
+     * 获取歌单列表
+     *
+     * @param params 接口url参数
+     * @return 歌单列表
+     */
+    @Override
+    public List<DiscSongApiDTO> getDiscSongList(Map<String, String> params) {
+        try {
+            logger.info("调用QQ音乐接口, 获取歌单详情");
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.REFERER, Constant.COMMON_API_REFERER);
+            headers.add(HttpHeaders.HOST, Constant.COMMON_API_HOST);
+            HttpEntity entity = new HttpEntity(headers);
+            String targetUrl = RequestUrlUtil.concatUrl(discDetailUrl, params);
+            String responseString = restTemplate.exchange(targetUrl, HttpMethod.GET, entity, String.class).getBody();
+            logger.debug("QQ音乐响应[{}]", responseString);
+            JSONObject responseObject = null;
+            try {
+                responseObject = JSONObject.parseObject(responseString);
+            } catch (JSONException je) {
+                String jsonResponseString = ResponseUtil.parseJsonpResponseToJsonResponse(responseString);
+                responseObject = JSONObject.parseObject(jsonResponseString);
+            } catch (Exception e) {
+                logger.error("解析QQ音乐接口返回异常", e);
+                throw new MusicPlayerException(ErrConstant.UNKNOWN_ERR, "解析QQ音乐接口返回异常");
+            }
+            if (responseObject == null) {
+                throw new MusicPlayerException(ErrConstant.UNKNOWN_ERR, "获取歌单详情失败");
+            }
+            if (RESPONSE_CODE_OK.equals(responseObject.getInteger(RESPONSE_CODE_KEY))) {
+                logger.info("调用QQ音乐接口成功");
+                JSONArray arrayObject = responseObject.getJSONArray(CD_LIST_KEY);
+                if (arrayObject == null) {
+                    throw new MusicPlayerException(ErrConstant.UNKNOWN_ERR, "获取歌单详情失败");
+                }
+                JSONObject discObject = arrayObject.getJSONObject(0);
+                if (discObject == null) {
+                    throw new MusicPlayerException(ErrConstant.UNKNOWN_ERR, "获取歌单详情失败");
+                }
+                JSONArray songArray = discObject.getJSONArray(SONG_LIST_KEY);
+                if (songArray == null) {
+                    throw new MusicPlayerException(ErrConstant.UNKNOWN_ERR, "获取歌单详情失败");
+                }
+                String songArrayString = songArray.toJSONString();
+                return JSONArray.parseArray(songArrayString, DiscSongApiDTO.class);
             } else {
                 logger.warn("调用QQ音乐接口失败");
                 return null;

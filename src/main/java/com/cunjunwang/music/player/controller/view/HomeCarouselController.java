@@ -1,4 +1,4 @@
-package com.cunjunwang.music.player.controller;
+package com.cunjunwang.music.player.controller.view;
 
 import com.cunjunwang.music.player.constant.ErrConstant;
 import com.cunjunwang.music.player.entity.ResultData;

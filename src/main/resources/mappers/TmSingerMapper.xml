@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cunjunwang.music.player.dao.TmSingerMapper">
+    <resultMap id="BaseResultMap" type="com.cunjunwang.music.player.model.po.TmSinger">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="uuid" jdbcType="VARCHAR" property="uuid"/>
+        <result column="singer_name" jdbcType="VARCHAR" property="singerName"/>
+        <result column="singer_other_name" jdbcType="VARCHAR" property="singerOtherName"/>
+        <result column="singer_name_index" jdbcType="VARCHAR" property="singerNameIndex"/>
+        <result column="third_id" jdbcType="BIGINT" property="thirdId"/>
+        <result column="third_uuid" jdbcType="VARCHAR" property="thirdUuid"/>
+        <result column="singer_area" jdbcType="VARCHAR" property="singerArea"/>
+        <result column="singer_area_code" jdbcType="VARCHAR" property="singerAreaCode"/>
+        <result column="singer_genre" jdbcType="VARCHAR" property="singerGenre"/>
+        <result column="singer_genre_code" jdbcType="VARCHAR" property="singerGenreCode"/>
+        <result column="singer_gender" jdbcType="VARCHAR" property="singerGender"/>
+        <result column="singer_gender_code" jdbcType="VARCHAR" property="singerGenderCode"/>
+        <result column="is_del" jdbcType="INTEGER" property="isDel"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, uuid, singer_name, singer_other_name, singer_name_index, third_id, third_uuid,
+        singer_area, singer_area_code, singer_genre, singer_genre_code, singer_gender, singer_gender_code,
+        is_del, create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tm_singer
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <insert id="insert" parameterType="com.cunjunwang.music.player.model.po.TmSinger">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tm_singer (id, uuid, singer_name,
+        singer_other_name, singer_name_index, third_id,
+        third_uuid, singer_area, singer_area_code,
+        singer_genre, singer_genre_code, singer_gender,
+        singer_gender_code, is_del, create_time,
+        update_time)
+        values (#{id,jdbcType=BIGINT}, #{uuid,jdbcType=VARCHAR}, #{singerName,jdbcType=VARCHAR},
+        #{singerOtherName,jdbcType=VARCHAR}, #{singerNameIndex,jdbcType=VARCHAR}, #{thirdId,jdbcType=BIGINT},
+        #{thirdUuid,jdbcType=VARCHAR}, #{singerArea,jdbcType=VARCHAR}, #{singerAreaCode,jdbcType=VARCHAR},
+        #{singerGenre,jdbcType=VARCHAR}, #{singerGenreCode,jdbcType=VARCHAR}, #{singerGender,jdbcType=VARCHAR},
+        #{singerGenderCode,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.cunjunwang.music.player.model.po.TmSinger">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tm_singer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="uuid != null">
+                uuid,
+            </if>
+            <if test="singerName != null">
+                singer_name,
+            </if>
+            <if test="singerOtherName != null">
+                singer_other_name,
+            </if>
+            <if test="singerNameIndex != null">
+                singer_name_index,
+            </if>
+            <if test="thirdId != null">
+                third_id,
+            </if>
+            <if test="thirdUuid != null">
+                third_uuid,
+            </if>
+            <if test="singerArea != null">
+                singer_area,
+            </if>
+            <if test="singerAreaCode != null">
+                singer_area_code,
+            </if>
+            <if test="singerGenre != null">
+                singer_genre,
+            </if>
+            <if test="singerGenreCode != null">
+                singer_genre_code,
+            </if>
+            <if test="singerGender != null">
+                singer_gender,
+            </if>
+            <if test="singerGenderCode != null">
+                singer_gender_code,
+            </if>
+            <if test="isDel != null">
+                is_del,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=BIGINT},
+            <if test="uuid != null">
+                #{uuid,jdbcType=VARCHAR},
+            </if>
+            <if test="singerName != null">
+                #{singerName,jdbcType=VARCHAR},
+            </if>
+            <if test="singerOtherName != null">
+                #{singerOtherName,jdbcType=VARCHAR},
+            </if>
+            <if test="singerNameIndex != null">
+                #{singerNameIndex,jdbcType=VARCHAR},
+            </if>
+            <if test="thirdId != null">
+                #{thirdId,jdbcType=BIGINT},
+            </if>
+            <if test="thirdUuid != null">
+                #{thirdUuid,jdbcType=VARCHAR},
+            </if>
+            <if test="singerArea != null">
+                #{singerArea,jdbcType=VARCHAR},
+            </if>
+            <if test="singerAreaCode != null">
+                #{singerAreaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="singerGenre != null">
+                #{singerGenre,jdbcType=VARCHAR},
+            </if>
+            <if test="singerGenreCode != null">
+                #{singerGenreCode,jdbcType=VARCHAR},
+            </if>
+            <if test="singerGender != null">
+                #{singerGender,jdbcType=VARCHAR},
+            </if>
+            <if test="singerGenderCode != null">
+                #{singerGenderCode,jdbcType=VARCHAR},
+            </if>
+            <if test="isDel != null">
+                #{isDel,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cunjunwang.music.player.model.po.TmSinger">
+        update tm_singer
+        <set>
+            <if test="uuid != null">
+                uuid = #{uuid,jdbcType=VARCHAR},
+            </if>
+            <if test="singerName != null">
+                singer_name = #{singerName,jdbcType=VARCHAR},
+            </if>
+            <if test="singerOtherName != null">
+                singer_other_name = #{singerOtherName,jdbcType=VARCHAR},
+            </if>
+            <if test="singerNameIndex != null">
+                singer_name_index = #{singerNameIndex,jdbcType=VARCHAR},
+            </if>
+            <if test="thirdId != null">
+                third_id = #{thirdId,jdbcType=BIGINT},
+            </if>
+            <if test="thirdUuid != null">
+                third_uuid = #{thirdUuid,jdbcType=VARCHAR},
+            </if>
+            <if test="singerArea != null">
+                singer_area = #{singerArea,jdbcType=VARCHAR},
+            </if>
+            <if test="singerAreaCode != null">
+                singer_area_code = #{singerAreaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="singerGenre != null">
+                singer_genre = #{singerGenre,jdbcType=VARCHAR},
+            </if>
+            <if test="singerGenreCode != null">
+                singer_genre_code = #{singerGenreCode,jdbcType=VARCHAR},
+            </if>
+            <if test="singerGender != null">
+                singer_gender = #{singerGender,jdbcType=VARCHAR},
+            </if>
+            <if test="singerGenderCode != null">
+                singer_gender_code = #{singerGenderCode,jdbcType=VARCHAR},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cunjunwang.music.player.model.po.TmSinger">
+        update tm_singer
+        set uuid               = #{uuid,jdbcType=VARCHAR},
+            singer_name        = #{singerName,jdbcType=VARCHAR},
+            singer_other_name  = #{singerOtherName,jdbcType=VARCHAR},
+            singer_name_index  = #{singerNameIndex,jdbcType=VARCHAR},
+            third_id           = #{thirdId,jdbcType=BIGINT},
+            third_uuid         = #{thirdUuid,jdbcType=VARCHAR},
+            singer_area        = #{singerArea,jdbcType=VARCHAR},
+            singer_area_code   = #{singerAreaCode,jdbcType=VARCHAR},
+            singer_genre       = #{singerGenre,jdbcType=VARCHAR},
+            singer_genre_code  = #{singerGenreCode,jdbcType=VARCHAR},
+            singer_gender      = #{singerGender,jdbcType=VARCHAR},
+            singer_gender_code = #{singerGenderCode,jdbcType=VARCHAR},
+            is_del             = #{isDel,jdbcType=INTEGER},
+            create_time        = #{createTime,jdbcType=TIMESTAMP},
+            update_time        = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>
